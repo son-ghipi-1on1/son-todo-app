@@ -12,8 +12,8 @@ import type { Todo, TodoTab } from "@/lib/types";
 
 function formatDueDate(dueDate: string | null): string {
   if (!dueDate) return "期限なし";
-  const [year, month, day] = dueDate.split("-");
-  return `${year}/${Number(month)}/${Number(day)}`;
+  const [, month, day] = dueDate.split("-");
+  return `${Number(month)}/${Number(day)}`;
 }
 
 function todayLocalDateString(): string {
