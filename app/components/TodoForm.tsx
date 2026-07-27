@@ -67,14 +67,14 @@ export default function TodoForm() {
             placeholder="タスクを追加"
             aria-invalid={errorMessage ? true : undefined}
             aria-describedby={errorMessage ? "todo-title-error" : undefined}
-            className="w-full bg-transparent py-2 text-sm text-zinc-800 placeholder:text-zinc-400 focus:outline-none dark:text-zinc-100 dark:placeholder:text-zinc-500"
+            className="w-full bg-transparent py-2 text-base text-zinc-800 placeholder:text-zinc-400 focus:outline-none sm:text-sm dark:text-zinc-100 dark:placeholder:text-zinc-500"
           />
         </div>
         <input
           type="date"
           name="due_date"
           aria-label="期限日"
-          className="shrink-0 rounded-xl border border-black/10 bg-transparent px-3 py-2 text-sm text-zinc-600 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 dark:border-white/10 dark:text-zinc-300 dark:focus:ring-indigo-500/20"
+          className="shrink-0 rounded-xl border border-black/10 bg-transparent px-3 py-2 text-base text-zinc-600 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100 sm:text-sm dark:border-white/10 dark:text-zinc-300 dark:focus:ring-indigo-500/20"
         />
         <button
           type="submit"

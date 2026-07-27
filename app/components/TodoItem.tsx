@@ -222,35 +222,37 @@ export default function TodoItem({
         <div
           ref={containerRef}
           onBlur={handleContainerBlur}
-          className="flex items-center gap-3"
+          className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3"
         >
-          <Checkbox
-            checked={optimisticIsDone}
-            disabled
-            label={`${todo.title}を${optimisticIsDone ? "未完了" : "完了"}にする`}
-          />
-          <div className="flex flex-1 flex-col gap-1">
-            <input
-              type="text"
-              value={draftTitle}
-              onChange={(event) => setDraftTitle(event.target.value)}
-              onKeyDown={handleEditKeyDown}
-              maxLength={200}
-              autoFocus
-              aria-label="タスク名"
-              aria-invalid={editError ? true : undefined}
-              aria-describedby={editError ? `${todo.id}-edit-error` : undefined}
-              className="w-full rounded-xl border border-black/10 bg-white px-3 py-1.5 text-sm shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none dark:border-white/10 dark:bg-zinc-900 dark:focus:ring-indigo-500/20"
+          <div className="flex min-w-0 items-center gap-3 sm:flex-1">
+            <Checkbox
+              checked={optimisticIsDone}
+              disabled
+              label={`${todo.title}を${optimisticIsDone ? "未完了" : "完了"}にする`}
             />
-            {editError && (
-              <p
-                id={`${todo.id}-edit-error`}
-                role="alert"
-                className="text-xs text-red-600 dark:text-red-400"
-              >
-                {editError}
-              </p>
-            )}
+            <div className="flex min-w-0 flex-1 flex-col gap-1">
+              <input
+                type="text"
+                value={draftTitle}
+                onChange={(event) => setDraftTitle(event.target.value)}
+                onKeyDown={handleEditKeyDown}
+                maxLength={200}
+                autoFocus
+                aria-label="タスク名"
+                aria-invalid={editError ? true : undefined}
+                aria-describedby={editError ? `${todo.id}-edit-error` : undefined}
+                className="w-full rounded-xl border border-black/10 bg-white px-3 py-1.5 text-base shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none sm:text-sm dark:border-white/10 dark:bg-zinc-900 dark:focus:ring-indigo-500/20"
+              />
+              {editError && (
+                <p
+                  id={`${todo.id}-edit-error`}
+                  role="alert"
+                  className="text-xs text-red-600 dark:text-red-400"
+                >
+                  {editError}
+                </p>
+              )}
+            </div>
           </div>
           <input
             type="date"
@@ -258,7 +260,7 @@ export default function TodoItem({
             onChange={(event) => setDraftDueDate(event.target.value)}
             onKeyDown={handleEditKeyDown}
             aria-label="期限日"
-            className="shrink-0 rounded-xl border border-black/10 bg-white px-3 py-1.5 text-sm shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none dark:border-white/10 dark:bg-zinc-900 dark:focus:ring-indigo-500/20"
+            className="ml-8 shrink-0 rounded-xl border border-black/10 bg-white px-3 py-1.5 text-base shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none sm:ml-0 sm:text-sm dark:border-white/10 dark:bg-zinc-900 dark:focus:ring-indigo-500/20"
           />
         </div>
       </li>
@@ -266,63 +268,67 @@ export default function TodoItem({
   }
 
   return (
-    <li className="group -mx-2 flex items-center gap-3 rounded-xl border-b border-black/5 px-2 py-2.5 transition-colors last:border-b-0 hover:bg-zinc-50 dark:border-white/10 dark:hover:bg-white/5">
-      <Checkbox
-        checked={optimisticIsDone}
-        onChange={handleToggle}
-        label={`${todo.title}を${optimisticIsDone ? "未完了" : "完了"}にする`}
-      />
-      <button
-        type="button"
-        onClick={startEditing}
-        className={`flex-1 truncate rounded-lg border-0 bg-transparent py-0.5 text-left transition-colors ${
-          optimisticIsDone
-            ? "text-zinc-400 line-through dark:text-zinc-500"
-            : "text-zinc-800 dark:text-zinc-100"
-        }`}
-      >
-        {todo.title}
-      </button>
-      <span
-        className={`flex shrink-0 items-center gap-1 text-xs ${DUE_STATUS_CLASSNAME[getDueStatus(todo.due_date, today)]}`}
-      >
-        {getDueStatus(todo.due_date, today) === "overdue" && (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className="h-3.5 w-3.5 shrink-0"
-            aria-hidden="true"
-          >
-            <path
-              fillRule="evenodd"
-              d="M9.401 3.003c1.155-2 4.043-2 5.198 0l6.517 11.26c1.155 2-.289 4.5-2.599 4.5H5.483c-2.31 0-3.754-2.5-2.599-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
-              clipRule="evenodd"
-            />
-          </svg>
-        )}
-        {formatDueDate(todo.due_date)}
-      </span>
-      <button
-        type="button"
-        onClick={handleDelete}
-        aria-label={`${todo.title}を削除`}
-        className="shrink-0 rounded-full p-1.5 text-zinc-400 opacity-0 transition-all group-hover:opacity-100 group-focus-within:opacity-100 hover:bg-red-50 hover:text-red-600 focus-visible:opacity-100 dark:text-zinc-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          className="h-4 w-4"
-          aria-hidden="true"
+    <li className="group -mx-2 rounded-xl border-b border-black/5 px-2 py-2.5 transition-colors last:border-b-0 hover:bg-zinc-50 dark:border-white/10 dark:hover:bg-white/5">
+      <div className="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-1.5 sm:flex sm:gap-3">
+        <Checkbox
+          checked={optimisticIsDone}
+          onChange={handleToggle}
+          label={`${todo.title}を${optimisticIsDone ? "未完了" : "完了"}にする`}
+        />
+        <button
+          type="button"
+          onClick={startEditing}
+          className={`min-w-0 truncate rounded-lg border-0 bg-transparent py-0.5 text-left transition-colors sm:flex-1 ${
+            optimisticIsDone
+              ? "text-zinc-400 line-through dark:text-zinc-500"
+              : "text-zinc-800 dark:text-zinc-100"
+          }`}
         >
-          <path
-            fillRule="evenodd"
-            d="M8.75 1a.75.75 0 0 0-.75.75V3H4a.75.75 0 0 0 0 1.5h.31l.68 10.2A2.25 2.25 0 0 0 7.24 17h5.52a2.25 2.25 0 0 0 2.25-2.3l.68-10.2H16A.75.75 0 0 0 16 3h-3.25V1.75a.75.75 0 0 0-.75-.75h-3.25Zm2.5 2V2.5h-2.5V3h2.5ZM8 7.25a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm3.5 0a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </button>
+          {todo.title}
+        </button>
+        <div className="col-span-2 flex items-center justify-between gap-2 sm:contents">
+          <span
+            className={`flex shrink-0 items-center gap-1 text-xs ${DUE_STATUS_CLASSNAME[getDueStatus(todo.due_date, today)]}`}
+          >
+            {getDueStatus(todo.due_date, today) === "overdue" && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="h-3.5 w-3.5 shrink-0"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M9.401 3.003c1.155-2 4.043-2 5.198 0l6.517 11.26c1.155 2-.289 4.5-2.599 4.5H5.483c-2.31 0-3.754-2.5-2.599-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            )}
+            {formatDueDate(todo.due_date)}
+          </span>
+          <button
+            type="button"
+            onClick={handleDelete}
+            aria-label={`${todo.title}を削除`}
+            className="shrink-0 rounded-full p-1.5 text-zinc-400 opacity-100 transition-all hover:bg-red-50 hover:text-red-600 focus-visible:opacity-100 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100 dark:text-zinc-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="h-4 w-4"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8.75 1a.75.75 0 0 0-.75.75V3H4a.75.75 0 0 0 0 1.5h.31l.68 10.2A2.25 2.25 0 0 0 7.24 17h5.52a2.25 2.25 0 0 0 2.25-2.3l.68-10.2H16A.75.75 0 0 0 16 3h-3.25V1.75a.75.75 0 0 0-.75-.75h-3.25Zm2.5 2V2.5h-2.5V3h2.5ZM8 7.25a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Zm3.5 0a.75.75 0 0 1 1.5 0v6.5a.75.75 0 0 1-1.5 0v-6.5Z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
     </li>
   );
 }
