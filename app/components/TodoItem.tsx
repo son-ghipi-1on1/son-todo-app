@@ -53,13 +53,55 @@ function getDueStatus(dueDate: string | null, today: string | null): DueStatus {
 }
 
 const DUE_STATUS_CLASSNAME: Record<DueStatus, string> = {
-  overdue: "font-medium text-red-600 dark:text-red-400",
-  today: "font-medium text-orange-600 dark:text-orange-400",
-  soon: "font-bold",
-  later: "",
-  none: "text-zinc-400 dark:text-zinc-500",
-  unknown: "",
+  overdue:
+    "rounded-full bg-red-50 px-2.5 py-1 font-medium text-red-600 dark:bg-red-500/10 dark:text-red-400",
+  today:
+    "rounded-full bg-orange-50 px-2.5 py-1 font-semibold text-orange-600 dark:bg-orange-500/10 dark:text-orange-400",
+  soon: "rounded-full bg-zinc-100 px-2.5 py-1 font-semibold text-zinc-700 dark:bg-white/10 dark:text-zinc-200",
+  later: "px-1 text-zinc-500 dark:text-zinc-400",
+  none: "px-1 text-zinc-400 dark:text-zinc-500",
+  unknown: "px-1 text-zinc-500 dark:text-zinc-400",
 };
+
+function Checkbox({
+  checked,
+  onChange,
+  disabled,
+  label,
+}: {
+  checked: boolean;
+  onChange?: () => void;
+  disabled?: boolean;
+  label: string;
+}) {
+  return (
+    <label className="relative flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center">
+      <input
+        type="checkbox"
+        checked={checked}
+        onChange={onChange}
+        disabled={disabled}
+        aria-label={label}
+        className="peer absolute inset-0 h-5 w-5 cursor-pointer appearance-none rounded-full border-2 border-zinc-300 transition-colors checked:border-transparent disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-600"
+      />
+      <span className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 to-violet-500 opacity-0 transition-opacity peer-checked:opacity-100" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        aria-hidden="true"
+        className="pointer-events-none relative h-3 w-3 text-white opacity-0 transition-opacity peer-checked:opacity-100"
+      >
+        <path
+          fillRule="evenodd"
+          d="M16.704 5.29a.75.75 0 0 1 .006 1.06l-7.25 7.5a.75.75 0 0 1-1.073.006l-3.25-3.25a.75.75 0 1 1 1.06-1.06l2.72 2.72 6.716-6.945a.75.75 0 0 1 1.071-.03Z"
+          clipRule="evenodd"
+        />
+      </svg>
+      <span className="pointer-events-none absolute -inset-1 rounded-full ring-2 ring-indigo-400 opacity-0 peer-focus-visible:opacity-100" />
+    </label>
+  );
+}
 
 export default function TodoItem({
   todo,
@@ -176,18 +218,16 @@ export default function TodoItem({
 
   if (isEditing) {
     return (
-      <li className="border-b border-black/10 py-3 last:border-b-0 dark:border-white/10">
+      <li className="border-b border-black/5 py-2.5 last:border-b-0 dark:border-white/10">
         <div
           ref={containerRef}
           onBlur={handleContainerBlur}
           className="flex items-center gap-3"
         >
-          <input
-            type="checkbox"
+          <Checkbox
             checked={optimisticIsDone}
             disabled
-            aria-label={`${todo.title}を${optimisticIsDone ? "未完了" : "完了"}にする`}
-            className="h-5 w-5 shrink-0 opacity-50"
+            label={`${todo.title}を${optimisticIsDone ? "未完了" : "完了"}にする`}
           />
           <div className="flex flex-1 flex-col gap-1">
             <input
@@ -200,7 +240,7 @@ export default function TodoItem({
               aria-label="タスク名"
               aria-invalid={editError ? true : undefined}
               aria-describedby={editError ? `${todo.id}-edit-error` : undefined}
-              className="w-full rounded border border-black/20 bg-white px-2 py-1 text-sm dark:border-white/20 dark:bg-zinc-900"
+              className="w-full rounded-xl border border-black/10 bg-white px-3 py-1.5 text-sm shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none dark:border-white/10 dark:bg-zinc-900 dark:focus:ring-indigo-500/20"
             />
             {editError && (
               <p
@@ -218,7 +258,7 @@ export default function TodoItem({
             onChange={(event) => setDraftDueDate(event.target.value)}
             onKeyDown={handleEditKeyDown}
             aria-label="期限日"
-            className="shrink-0 rounded border border-black/20 bg-white px-2 py-1 text-sm dark:border-white/20 dark:bg-zinc-900"
+            className="shrink-0 rounded-xl border border-black/10 bg-white px-3 py-1.5 text-sm shadow-sm focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 focus:outline-none dark:border-white/10 dark:bg-zinc-900 dark:focus:ring-indigo-500/20"
           />
         </div>
       </li>
@@ -226,34 +266,32 @@ export default function TodoItem({
   }
 
   return (
-    <li className="group flex items-center gap-3 border-b border-black/10 py-3 last:border-b-0 dark:border-white/10">
-      <input
-        type="checkbox"
+    <li className="group -mx-2 flex items-center gap-3 rounded-xl border-b border-black/5 px-2 py-2.5 transition-colors last:border-b-0 hover:bg-zinc-50 dark:border-white/10 dark:hover:bg-white/5">
+      <Checkbox
         checked={optimisticIsDone}
         onChange={handleToggle}
-        aria-label={`${todo.title}を${optimisticIsDone ? "未完了" : "完了"}にする`}
-        className="h-5 w-5 shrink-0"
+        label={`${todo.title}を${optimisticIsDone ? "未完了" : "完了"}にする`}
       />
       <button
         type="button"
         onClick={startEditing}
-        className={`flex-1 truncate border-0 bg-transparent p-0 text-left ${
+        className={`flex-1 truncate rounded-lg border-0 bg-transparent py-0.5 text-left transition-colors ${
           optimisticIsDone
             ? "text-zinc-400 line-through dark:text-zinc-500"
-            : ""
+            : "text-zinc-800 dark:text-zinc-100"
         }`}
       >
         {todo.title}
       </button>
       <span
-        className={`flex shrink-0 items-center gap-1 text-sm ${DUE_STATUS_CLASSNAME[getDueStatus(todo.due_date, today)]}`}
+        className={`flex shrink-0 items-center gap-1 text-xs ${DUE_STATUS_CLASSNAME[getDueStatus(todo.due_date, today)]}`}
       >
         {getDueStatus(todo.due_date, today) === "overdue" && (
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
-            className="h-4 w-4 shrink-0"
+            className="h-3.5 w-3.5 shrink-0"
             aria-hidden="true"
           >
             <path
@@ -269,7 +307,7 @@ export default function TodoItem({
         type="button"
         onClick={handleDelete}
         aria-label={`${todo.title}を削除`}
-        className="shrink-0 rounded p-1 text-zinc-400 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 hover:text-red-600 focus-visible:opacity-100 dark:text-zinc-500 dark:hover:text-red-400"
+        className="shrink-0 rounded-full p-1.5 text-zinc-400 opacity-0 transition-all group-hover:opacity-100 group-focus-within:opacity-100 hover:bg-red-50 hover:text-red-600 focus-visible:opacity-100 dark:text-zinc-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

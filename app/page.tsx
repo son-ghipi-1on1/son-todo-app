@@ -16,13 +16,29 @@ export default async function Home(props: PageProps<"/">) {
   const visibleTodos = activeTab === "done" ? doneTodos : todoTodos;
 
   return (
-    <div className="flex flex-1 justify-center bg-zinc-50 dark:bg-black">
-      <main className="w-full max-w-2xl px-4 py-10 sm:px-8">
-        <h1 className="mb-6 text-2xl font-bold text-black dark:text-zinc-50">
-          Todo
-        </h1>
+    <div className="relative flex flex-1 justify-center overflow-hidden bg-gradient-to-b from-indigo-50 via-white to-white px-4 py-10 dark:from-zinc-950 dark:via-black dark:to-black sm:px-8">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-indigo-300/30 blur-3xl dark:bg-indigo-600/10"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-24 -bottom-24 h-72 w-72 rounded-full bg-violet-300/30 blur-3xl dark:bg-violet-600/10"
+      />
+
+      <main className="relative w-full max-w-2xl">
+        <header className="mb-8">
+          <h1 className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent">
+            Todo
+          </h1>
+          <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">
+            今日やることを、ひとつずつ片づけよう。
+          </p>
+        </header>
+
         <TodoForm />
-        <div className="flex flex-wrap items-center justify-between gap-2">
+
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <TabSwitcher
             activeTab={activeTab}
             sort={activeSort}
@@ -31,7 +47,8 @@ export default async function Home(props: PageProps<"/">) {
           />
           <SortSelect tab={activeTab} sort={activeSort} />
         </div>
-        <div className="mt-4 rounded-2xl bg-white px-4 dark:bg-zinc-900">
+
+        <div className="rounded-3xl border border-black/5 bg-white/80 px-4 shadow-sm shadow-black/5 backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60">
           <TodoList todos={visibleTodos} activeTab={activeTab} />
         </div>
       </main>

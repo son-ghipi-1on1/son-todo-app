@@ -28,7 +28,7 @@ export default function TabSwitcher({
     <div
       role="tablist"
       aria-label="タスクの表示切り替え"
-      className="flex flex-wrap gap-2"
+      className="flex flex-wrap gap-1 rounded-full bg-zinc-100 p-1 dark:bg-white/5"
     >
       {TABS.map(({ tab, label }) => {
         const isActive = tab === activeTab;
@@ -43,14 +43,20 @@ export default function TabSwitcher({
             href={query ? `/?${query}` : "/"}
             role="tab"
             aria-selected={isActive}
-            className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+            className={`flex items-center gap-1.5 whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium transition-all ${
               isActive
-                ? "bg-black text-white dark:bg-white dark:text-black"
-                : "bg-black/5 text-zinc-700 hover:bg-black/10 dark:bg-white/10 dark:text-zinc-300 dark:hover:bg-white/20"
+                ? "bg-white text-indigo-600 shadow-sm dark:bg-zinc-800 dark:text-indigo-400"
+                : "text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200"
             }`}
           >
             {label}
-            <span className="ml-1.5 text-xs opacity-70">
+            <span
+              className={`rounded-full px-1.5 py-0.5 text-xs ${
+                isActive
+                  ? "bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300"
+                  : "bg-zinc-200/70 text-zinc-500 dark:bg-white/10 dark:text-zinc-400"
+              }`}
+            >
               {counts[tab]}
             </span>
           </Link>
